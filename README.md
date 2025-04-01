@@ -15,10 +15,10 @@
 docker-compose up --build
 ```
 
-**Доступ**  
+## Доступ
 Перейдите в браузере: [`http://localhost:8081`](http://localhost:8081).  
 
-**Переменные окружения**  
+## Переменные окружения
 Можно задать в `.env` или `docker-compose.yml`:  
 ```env
 MANAGER_PORT=8080  # Порт менеджера  
