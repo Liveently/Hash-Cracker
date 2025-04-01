@@ -1,0 +1,57 @@
+version: "3.8"
+
+networks:
+  app-network:
+    driver: bridge
+
+
+services:
+  manager:
+    container_name: manager
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+      args:
+        SERVICE: manager
+        SERVICE_PORT: 8080
+    ports:
+      - "8080:8080"
+    environment:
+      WORKER_PORT: 8081
+      TASK_TIMEOUT: "PT1M"      # Таймаут задачи (ISO 8601, например, PT5M = 5 минут)
+      HASH_PARTS: "4"           # Количество частей, на которые делится хеш
+      LETTERS_AND_DIGITS: "abcdefghijklmnopqrstuvwxyz0123456789"  # Алфавит для перебора
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+      args:
+        SERVICE: worker
+        SERVICE_PORT: 8081
+    deploy:
+      replicas: 3
+    environment:
+      MANAGER_PORT: 8080        # Порт менеджера
+      TASK_TIMEOUT: "PT1M"      # Таймаут задачи (ISO 8601, например, PT5M = 5 минут)
+    depends_on:
+      - manager 
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  ui:
+    image: nginx:latest
+    container_name: hash-cracker-ui
+    volumes:
+      - ./ui:/usr/share/nginx/html
+    ports:
+      - "8081:80"
+    depends_on:
+      - manager
+    networks:
+      - app-network
+    restart: unless-stopped

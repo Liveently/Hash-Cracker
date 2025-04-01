@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hash Cracker</title>
+    <script>
+        async function sendCrackRequest() {
+            const hash = document.getElementById("hashInput").value;
+            const maxLength = document.getElementById("maxLengthInput").value;
+            const responseBox = document.getElementById("crackResponse");
+
+            try {
+                const response = await fetch("http://localhost:8080/api/hash/crack", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ hash, maxLength: parseInt(maxLength) })
+                });
+                const data = await response.json();
+                responseBox.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                responseBox.textContent = "Ошибка: " + error.message;
+            }
+        }
+
+        async function checkStatus() {
+            const requestId = document.getElementById("requestIdInput").value;
+            const statusBox = document.getElementById("statusResponse");
+
+            try {
+                const response = await fetch(`http://localhost:8080/api/hash/status?requestId=${requestId}`);
+                const data = await response.json();
+                statusBox.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                statusBox.textContent = "Ошибка: " + error.message;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h2>Hash Cracker</h2>
+
+    <h3>Отправить запрос</h3>
+    <label>Хеш:</label>
+    <input type="text" id="hashInput" value="5d41402abc4b2a76b9719d911017c592">
+    <br>
+    <label>Максимальная длина:</label>
+    <input type="number" id="maxLengthInput" value="5">
+    <br>
+    <button onclick="sendCrackRequest()">Отправить</button>
+    <pre id="crackResponse"></pre>
+
+    <h3>Проверить статус</h3>
+    <label>Request ID:</label>
+    <input type="text" id="requestIdInput" placeholder="Введите requestId">
+    <br>
+    <button onclick="checkStatus()">Проверить</button>
+    <pre id="statusResponse"></pre>
+</body>
+</html>
