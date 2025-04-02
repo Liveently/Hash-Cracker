@@ -26,6 +26,7 @@ WORKER_PORT=8081   # Порт воркеров
 TASK_TIMEOUT=PT1M  # Таймаут задачи
 HASH_PARTS: "4"           # Количество частей, на которые делится хеш
 LETTERS_AND_DIGITS: "abcdefghijklmnopqrstuvwxyz0123456789"  # Алфавит для перебора
+PROGRESS_UPDATE_INTERVAL: "10000"  #Каждые каждые x итераций обновляется прогресс
 ```
 
 ## Масштабируемость
