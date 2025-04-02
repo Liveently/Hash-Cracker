@@ -12,7 +12,8 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlType(name = "", propOrder = {
     "requestId",
     "partNumber",
-    "answers"
+    "answers",
+    "progress"  // Добавляем новое поле
 })
 @XmlRootElement(name = "CrackHashWorkerResponse", namespace = "http://ccfit.nsu.ru/schema/crack-hash-response")
 public class CrackHashWorkerResponse {
@@ -20,11 +21,19 @@ public class CrackHashWorkerResponse {
     @XmlElement(name = "RequestId", required = true)
     protected String requestId;
 
-    @XmlElement(name = "PartNumber")
+    @XmlElement(name = "PartNumber", required = true)
     protected int partNumber;
+
+    @XmlElement(name = "Progress", required = true) // Новое поле для прогресса
+    protected double progress;
 
     @XmlElement(name = "Answers", required = true)
     protected CrackHashWorkerResponse.Answers answers;
+
+    // Конструктор по умолчанию с инициализацией answers
+    public CrackHashWorkerResponse() {
+        this.answers = new Answers(); // Инициализируем answers, чтобы избежать NPE
+    }
 
     public String getRequestId() {
         return requestId;
@@ -50,6 +59,14 @@ public class CrackHashWorkerResponse {
         this.answers = value;
     }
 
+    public double getProgress() {  // Геттер для прогресса
+        return progress;
+    }
+
+    public void setProgress(double progress) {  // Сеттер для прогресса
+        this.progress = progress;
+    }
+
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
         "words"
@@ -58,11 +75,26 @@ public class CrackHashWorkerResponse {
 
         protected List<String> words;
 
+        public Answers() {
+            this.words = new ArrayList<>(); // Инициализируем words, чтобы избежать NPE
+        }
+
         public List<String> getWords() {
-            if (words == null) {
-                words = new ArrayList<>();
-            }
             return words;
         }
+
+        public void setWords(List<String> words) {
+            this.words = words;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "CrackHashWorkerResponse{" +
+                "requestId='" + requestId + '\'' +
+                ", partNumber=" + partNumber +
+                ", answers=" + (answers != null ? answers.getWords() : "null") +
+                ", progress=" + progress +
+                '}';
     }
 }

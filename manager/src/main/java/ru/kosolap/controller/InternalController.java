@@ -26,4 +26,10 @@ public class InternalController {
         service.recieveAnswer(response);
     }
 
+    @PatchMapping("/api/manager/hash/crack/progress")
+    public void updateProgress(@RequestBody CrackHashWorkerResponse response) { // обновляет прогресс от узлов
+        System.out.println("Обновление прогресса от воркера: " + response);
+        service.updateProgress(response);
+    }
+
 }

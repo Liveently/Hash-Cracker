@@ -4,11 +4,13 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum TaskStatusEnum {
-    IN_QUEUE("IN_QUEUE"),      // В очереди
     IN_PROGRESS("IN_PROGRESS"), // В работе
-    ERROR("ERROR"),            // Ошибка
-    READY("READY"),            // Готово
-    TIMEOUT("TIMEOUT");        // Истекло время
+    PARTIAL_SUCCESS_TIMEOUT("PARTIAL_SUCCESS_TIMEOUT"),     // Частично успешно
+    PARTIAL_SUCCESS_WORKING("PARTIAL_SUCCESS_WORKING"),     // Частично успешно, но ещё работает
+    SUCCESS("SUCCESS"),            // Готово
+    TIMEOUT("TIMEOUT"),       // Истекло время
+    NO_RESULTS("NO_RESULTS");     //нет результата
+
 
     private final String value;
 

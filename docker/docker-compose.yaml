@@ -19,7 +19,7 @@ services:
     environment:
       WORKER_PORT: 8081
       TASK_TIMEOUT: "PT1M"      # Таймаут задачи (ISO 8601, например, PT5M = 5 минут)
-      HASH_PARTS: "4"           # Количество частей, на которые делится хеш
+      HASH_PARTS: "3"           # Количество частей, на которые делится хеш
       LETTERS_AND_DIGITS: "abcdefghijklmnopqrstuvwxyz0123456789"  # Алфавит для перебора
     networks:
       - app-network
@@ -37,6 +37,7 @@ services:
     environment:
       MANAGER_PORT: 8080        # Порт менеджера
       TASK_TIMEOUT: "PT1M"      # Таймаут задачи (ISO 8601, например, PT5M = 5 минут)
+      PROGRESS_UPDATE_INTERVAL: "10000"  #Каждые каждые x итераций обновляется прогресс
     depends_on:
       - manager 
     networks:

@@ -12,6 +12,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlType(name = "", propOrder = {
     "requestId",
     "partNumber",
+    "progress", // Добавляем прогресс
     "answers"
 })
 @XmlRootElement(name = "CrackHashWorkerResponse", namespace = "http://ccfit.nsu.ru/schema/crack-hash-response")
@@ -19,8 +20,13 @@ public class CrackHashWorkerResponse {
 
     @XmlElement(name = "RequestId", required = true)
     protected String requestId;
-    @XmlElement(name = "PartNumber")
+
+    @XmlElement(name = "PartNumber", required = true)
     protected int partNumber;
+
+    @XmlElement(name = "Progress", required = true) // Поле для передачи процента выполнения
+    protected double progress;
+
     @XmlElement(name = "Answers", required = true)
     protected CrackHashWorkerResponse.Answers answers;
 
@@ -30,7 +36,8 @@ public class CrackHashWorkerResponse {
 
     @Override
     public String toString() {
-        return "CrackHashWorkerResponse{requestId='" + requestId + "', partNumber=" + partNumber + ", answers=" + answers.getWords() + "}";
+        return "CrackHashWorkerResponse{requestId='" + requestId + "', partNumber=" + partNumber + 
+               ", progress=" + progress + "%, answers=" + answers.getWords() + "}";
     }
 
     public void setRequestId(String value) {
@@ -43,6 +50,14 @@ public class CrackHashWorkerResponse {
 
     public void setPartNumber(int value) {
         this.partNumber = value;
+    }
+
+    public double getProgress() {
+        return progress;
+    }
+
+    public void setProgress(int value) {
+        this.progress = value;
     }
 
     public CrackHashWorkerResponse.Answers getAnswers() {

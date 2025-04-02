@@ -19,6 +19,8 @@ import ru.kosolap.json.CrackHashWorkerResponse;
 import ru.kosolap.json.HashAndLength;
 import ru.kosolap.json.RequestId;
 import ru.kosolap.json.TaskStatus;
+import ru.kosolap.json.PartNumber;
+import ru.kosolap.json.Progress;
 import ru.kosolap.json.TaskStatusEnum;
 
 
@@ -79,34 +81,71 @@ public class ManagerService {
     }
 
     public TaskStatus getTaskStatus(RequestId id) { 
+
         TaskStatus status = idAndStatus.get(id);
         System.out.println(status.toString());
 
         Duration dur = Duration.between(status.getStartTime(), Instant.now()); 
         
-        if (dur.toMillis() > taskTimeout.toMillis() && status.getAnswer().isEmpty()) {
-            status.setStatus(TaskStatusEnum.TIMEOUT);
-        }
+        if (dur.toMillis() > taskTimeout.toMillis()) {
+        if (status.getAnswer().isEmpty()) {
+            status.setStatus(TaskStatusEnum.TIMEOUT); // Если ответов нет, таймаут
+        } else  {
+            // Если есть частичный результат, но не завершена за таймаут
+            status.setStatus(TaskStatusEnum.PARTIAL_SUCCESS_TIMEOUT);
+        }}
+
+        if (status.isCompleted()) {
+            if (status.getAnswer().isEmpty()) {
+                // Если все части завершены, но нет ответа, статус NO_RESULTS
+                status.setStatus(TaskStatusEnum.NO_RESULTS);
+            } else {
+                // Если все части завершены и есть ответ, статус SUCCESS
+                status.setStatus(TaskStatusEnum.SUCCESS);
+            }
+        } 
 
         return status;
     }
 
-    public void recieveAnswer(CrackHashWorkerResponse response) { //получает ответ от воркера
+    public void recieveAnswer(CrackHashWorkerResponse response) { 
+
         if (response.getAnswers().getWords().isEmpty()) {
             return;
         }
 
-        TaskStatus status = idAndStatus.get(new RequestId(response.getRequestId())); //есть ли слова в ответе - если есть добавление в список ответов и статус READY
+        RequestId requestId = new RequestId(response.getRequestId());
+        TaskStatus status = idAndStatus.get(requestId); 
+
         if (status == null) {
             return;
         }
-        System.out.println(status);
 
 
-        status.getAnswer().addAll(response.getAnswers().getWords());
-        status.setStatus(TaskStatusEnum.READY);
+        synchronized (status) { // Потокобезопасное обновление
+            status.getAnswer().addAll(response.getAnswers().getWords());
 
+            status.updateProgress(response.getPartNumber(), response.getProgress());
+          
+            status.setStatus(TaskStatusEnum.PARTIAL_SUCCESS_WORKING);
+            
+        }
     }
+
+
+    public void updateProgress(CrackHashWorkerResponse response) {
+
+        RequestId requestId = new RequestId(response.getRequestId());
+        TaskStatus status = idAndStatus.get(requestId);
+
+        
+        if (status != null) {
+            status.getProgressMap().put(response.getPartNumber(), response.getProgress());
+            System.out.println("Прогресс обновлен: " + response.getProgress());
+        }
+    }
+
+
 
     public List<String> getWorkers() { 
         InetAddress[] machines = null;   //Запрашивает все машины с именем "worker". Извлекает их IP-адреса и возвращает список.
