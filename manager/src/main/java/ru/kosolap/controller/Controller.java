@@ -20,12 +20,12 @@ public class Controller {
         this.service = service;
     }
 
-    @PostMapping("/hash/crack") //Получает тело запроса и Вызывает service.getRequestId(body), который создает задачу и возвращает RequestId.
+    @PostMapping("/hash/crack") 
     public RequestId postMethod(@RequestBody HashAndLength body) {
         return service.getRequestId(body);
     }
 
-    @GetMapping("/hash/status") //возвращает статус задачи
+    @GetMapping("/hash/status") 
     public TaskStatus getMessage(RequestId id) {
         return service.getTaskStatus(id);
     }

@@ -13,7 +13,7 @@ import jakarta.xml.bind.annotation.XmlType;
     "requestId",
     "partNumber",
     "answers",
-    "progress"  // Добавляем новое поле
+    "progress"  
 })
 @XmlRootElement(name = "CrackHashWorkerResponse", namespace = "http://ccfit.nsu.ru/schema/crack-hash-response")
 public class CrackHashWorkerResponse {
@@ -24,15 +24,14 @@ public class CrackHashWorkerResponse {
     @XmlElement(name = "PartNumber", required = true)
     protected int partNumber;
 
-    @XmlElement(name = "Progress", required = true) // Новое поле для прогресса
+    @XmlElement(name = "Progress", required = true) 
     protected double progress;
 
     @XmlElement(name = "Answers", required = true)
     protected CrackHashWorkerResponse.Answers answers;
 
-    // Конструктор по умолчанию с инициализацией answers
     public CrackHashWorkerResponse() {
-        this.answers = new Answers(); // Инициализируем answers, чтобы избежать NPE
+        this.answers = new Answers(); 
     }
 
     public String getRequestId() {
@@ -59,11 +58,11 @@ public class CrackHashWorkerResponse {
         this.answers = value;
     }
 
-    public double getProgress() {  // Геттер для прогресса
+    public double getProgress() { 
         return progress;
     }
 
-    public void setProgress(double progress) {  // Сеттер для прогресса
+    public void setProgress(double progress) { 
         this.progress = progress;
     }
 
@@ -76,7 +75,7 @@ public class CrackHashWorkerResponse {
         protected List<String> words;
 
         public Answers() {
-            this.words = new ArrayList<>(); // Инициализируем words, чтобы избежать NPE
+            this.words = new ArrayList<>(); 
         }
 
         public List<String> getWords() {

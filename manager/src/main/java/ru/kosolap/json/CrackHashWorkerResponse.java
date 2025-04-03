@@ -12,7 +12,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlType(name = "", propOrder = {
     "requestId",
     "partNumber",
-    "progress", // Добавляем прогресс
+    "progress", 
     "answers"
 })
 @XmlRootElement(name = "CrackHashWorkerResponse", namespace = "http://ccfit.nsu.ru/schema/crack-hash-response")
@@ -24,7 +24,7 @@ public class CrackHashWorkerResponse {
     @XmlElement(name = "PartNumber", required = true)
     protected int partNumber;
 
-    @XmlElement(name = "Progress", required = true) // Поле для передачи процента выполнения
+    @XmlElement(name = "Progress", required = true) 
     protected double progress;
 
     @XmlElement(name = "Answers", required = true)

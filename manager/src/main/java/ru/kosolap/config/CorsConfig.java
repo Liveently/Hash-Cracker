@@ -12,9 +12,9 @@ public class CorsConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**") // Разрешаем все пути
-                        .allowedOrigins("http://localhost:8081") // Разрешаем запросы с UI
-                        .allowedMethods("GET", "POST", "PATCH") // Разрешаем нужные методы
+                registry.addMapping("/**") 
+                        .allowedOrigins("http://localhost:8081") 
+                        .allowedMethods("GET", "POST", "PATCH") 
                         .allowCredentials(true);
             }
         };

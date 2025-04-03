@@ -35,20 +35,47 @@
                 statusBox.textContent = "Ошибка: " + error.message;
             }
         }
+
+        async function checkWorkers() {
+            const workersBox = document.getElementById("workersStatus");
+            workersBox.innerHTML = "Проверка...";
+
+            try {
+                // Запрашиваем статус всех воркеров у сервера
+                const response = await fetch("http://localhost:8080/api/workers/health");
+                const workers = await response.json();
+                
+                let statusHTML = "<h4>Статус воркеров:</h4>";
+
+                // Выводим статус каждого воркера
+                for (const [ip, status] of Object.entries(workers)) {
+                    const color = status === "Healthy" ? "green" : "red";
+                    statusHTML += `<p style="color: ${color};">${ip} - ${status}</p>`;
+                }
+                
+                workersBox.innerHTML = statusHTML;
+            } catch (error) {
+                workersBox.innerHTML = "Ошибка получения списка воркеров";
+            }
+        }
     </script>
 </head>
 <body>
     <h2>Hash Cracker</h2>
 
+    <br>
+
     <h3>Отправить запрос</h3>
     <label>Хеш:</label>
     <input type="text" id="hashInput" value="5d41402abc4b2a76b9719d911017c592">
     <br>
-    <label>.Длина:</label>
+    <label>Длина:</label>
     <input type="number" id="maxLengthInput" value="5">
     <br>
     <button onclick="sendCrackRequest()">Отправить</button>
     <pre id="crackResponse"></pre>
+
+    <br><br>
 
     <h3>Проверить статус</h3>
     <label>Request ID:</label>
@@ -56,5 +83,11 @@
     <br>
     <button onclick="checkStatus()">Проверить</button>
     <pre id="statusResponse"></pre>
+
+    <br><br>
+
+    <h3>Проверка воркеров</h3>
+    <button onclick="checkWorkers()">Проверить воркеров</button>
+    <div id="workersStatus"></div>
 </body>
 </html>

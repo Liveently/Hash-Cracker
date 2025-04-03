@@ -30,12 +30,10 @@ public class TaskStatus {
         this.progressMap = new ConcurrentHashMap<>();
     }
 
-    // 🔹 Обновление прогресса части
     public void updateProgress(int partNumber, double progress) {
         progressMap.put(partNumber, progress);
     }
 
-    // 🔹 Проверка, завершена ли вся задача
 
     @JsonIgnore
     public boolean isCompleted() {

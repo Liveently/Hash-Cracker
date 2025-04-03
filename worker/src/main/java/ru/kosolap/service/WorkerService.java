@@ -121,14 +121,8 @@ public class WorkerService {
     response.setRequestId(id);
     response.setProgress(progress);
     response.setPartNumber(partNumber);
-    
-    // Добавляем пустой объект answers, чтобы избежать NullPointerException
+
     response.setAnswers(new CrackHashWorkerResponse.Answers());
-
-   // System.out.println("Sending progress: " + response);
-
-    System.out.println("Отправляем в менеджер: " + response);
-
 
     restTemplate.patchForObject(managerUrl + "/internal/api/manager/hash/crack/progress", response, Void.class);
     }

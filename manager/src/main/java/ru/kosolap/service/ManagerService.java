@@ -68,7 +68,7 @@ public class ManagerService {
         request.setPartCount(partCount);
 
 
-        for (int part = 0; part < partCount; part++) { // какая по счету часть достается воркеру
+        for (int part = 0; part < partCount; part++) { 
             int addrIdx = part % addresses.size();
             String addr = addresses.get(addrIdx);
             String workerPort = System.getenv("WORKER_PORT");
@@ -122,7 +122,7 @@ public class ManagerService {
         }
 
 
-        synchronized (status) { // Потокобезопасное обновление
+        synchronized (status) { 
             status.getAnswer().addAll(response.getAnswers().getWords());
 
             status.updateProgress(response.getPartNumber(), response.getProgress());

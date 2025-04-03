@@ -20,9 +20,9 @@ public class Controller {
         this.service = service;
     }
 
-    @PostMapping("/api/worker/hash/crack/task") //Принимает HTTP POST-запросы от менеджера
+    @PostMapping("/api/worker/hash/crack/task") 
     public void postMethod(@RequestBody CrackHashManagerRequest body) {
-        service.crackHashTask(body); //Вызывает метод crackHashTask
+        service.crackHashTask(body); 
     }
 
 
